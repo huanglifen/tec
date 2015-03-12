@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= '';
+$config['base_url']	= 'http://127.0.0.1:81/huaxintec/';
 
 /*
 |--------------------------------------------------------------------------
@@ -356,6 +356,8 @@ $config['rewrite_short_tags'] = FALSE;
 |
 */
 $config['proxy_ips'] = '';
+
+$config['installed'] = APPPATH .'data/installed.lock';
 
 
 /* End of file config.php */
