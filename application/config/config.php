@@ -357,7 +357,9 @@ $config['rewrite_short_tags'] = FALSE;
 */
 $config['proxy_ips'] = '';
 
-$config['installed'] = APPPATH .'data/installed.lock';
+$config['installed'] = APPPATH  . 'data/installed.lock';
+$config['database'] = APPPATH  . 'config/database.php';
+$config['sql'] = APPPATH . 'data/huaxin.sql';
 
 
 /* End of file config.php */
