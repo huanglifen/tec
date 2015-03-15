@@ -3,6 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <link href="<?php echo $baseUrl; ?>public/css/install.css" rel="stylesheet"/>
+    <title><?php echo $title; ?></title>
 </head>
 <body>
 </body>

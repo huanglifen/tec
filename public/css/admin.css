@@ -1,0 +1,48 @@
+.box {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    margin: 100px auto;
+    padding: 35px 35px 50px;
+    width: 480px;
+}
+
+.box h3 {
+    border-bottom: 1px solid #DADADA;
+    margin : 10px 0;
+    padding : 10px 0;
+
+}
+
+.box .button {
+    background-color: #0099C6;
+    display: inline;
+    padding : 10px 20px;
+    color : #fff;
+    border : 0;
+    cursor: pointer;
+    font-size : 16px;
+    font-weight: bold;
+
+}
+.set_table {
+    margin: 5px 45px;
+}
+
+.set_table tr {
+    height: 40px;
+}
+
+.input_text {
+    line-height: 30px;
+    border: 1pt solid #b7babf;
+    width: 200px;
+    padding-left : 8px;
+}
+
+.ml180 {
+    margin-left:180px;
+}
+.error {
+    color : #CC0000;
+}
+

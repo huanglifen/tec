@@ -7,10 +7,18 @@ class Controller extends  CI_Controller {
 
     public function __construct() {
         parent::__construct();
+        $this->load->library('session');
     }
 
+    protected function checkInstall() {
+        $installed = $this->config->item('installed');
+        if (! file_exists($installed)) {
+            redirect('install/index');
+        }
+    }
     protected function showView($view) {
         $this->data['baseUrl'] = $this->config->item('base_url');
+        $this->data['title'] = '华信杰通';
         $this->load->view($view, $this->data);
     }
 

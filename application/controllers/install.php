@@ -15,6 +15,7 @@ class Install extends Controller
 
         $this->load->library('installlib');
         $this->lang->load($this->langFile);
+        $this->load->helper('url');
     }
     /**
      *安装首页
@@ -24,8 +25,8 @@ class Install extends Controller
         $installed = $this->config->item('installed');
         if (file_exists($installed)) {
             $this->showView('install/installed');
-        }
-        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+        }elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $host = $this->getParam('host', 'required{required}');
             $database = $this->getParam('database', 'required{required}');
             $dbname = $this->getParam('dbname', 'required{required}');
@@ -52,7 +53,7 @@ class Install extends Controller
                     $lock = fopen($installed, 'w+');
                     fwrite($lock, "INSTALLED");
                     fclose($lock);
-                    $this->showView('admin/login');
+                    redirect('adminlogin/index');
                 } else {
                     $this->errorInfo['dbmsg'] = $this->lang->line($result['msg']);
 
