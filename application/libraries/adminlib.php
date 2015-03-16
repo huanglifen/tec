@@ -24,7 +24,14 @@ class AdminLib extends BaseLib{
         return $result;
     }
 
+    /**
+     * 添加配置数据
+     * 
+     * @param array $config
+     */
     public function setConfig($config = array()) {
-
+        foreach($config as $key => $value){
+            $this->ci->config_model->addConfig($key, $value);
+        }
     }
 }
