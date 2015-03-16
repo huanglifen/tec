@@ -10,12 +10,32 @@ class Controller extends  CI_Controller {
         $this->load->library('session');
     }
 
+    /**
+     * 检测网站是否已安装
+     */
     protected function checkInstall() {
         $installed = $this->config->item('installed');
         if (! file_exists($installed)) {
             redirect('install/index');
         }
     }
+
+    /**
+     * 判断用户是否已登录，未登录则跳转到登录页面
+     */
+    protected function checkLogin()
+    {
+        $userId = $this->session->userdata('userId');
+        if (! $userId) {
+            redirect('adminlogin/index');
+        }
+    }
+
+    /**
+     * 显示视图公共方法
+     *
+     * @param $view
+     */
     protected function showView($view) {
         $this->data['baseUrl'] = $this->config->item('base_url');
         $this->data['title'] = '华信杰通';

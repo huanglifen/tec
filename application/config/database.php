@@ -14,7 +14,7 @@ $db['default']['autoinit'] = TRUE;
 $db['default']['dbcollat'] = FALSE;
 
 $db['default']['hostname'] = 'localhost';
-$db['default']['database'] = 'tec';
+$db['default']['database'] = 'huaxin';
 $db['default']['dbprefix'] = 'hx_';
 $db['default']['username'] = 'root';
-$db['default']['password'] = '';
+$db['default']['password'] = '123456';

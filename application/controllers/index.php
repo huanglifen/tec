@@ -1,7 +1,15 @@
-<?php
-/**
- * Created by PhpStorm.
- * User: Lianxw
- * Date: 2015/3/13
- * Time: 17:13
- */
+<?php if(! defined('BASEPATH')) exit('No direct script access allowed');
+
+require_once('application/controllers/controller.php');
+
+class Index extends Controller {
+
+    public function __construct() {
+        parent::__construct();
+    }
+
+    public function index() {
+        $this->showView('index');
+    }
+}
+

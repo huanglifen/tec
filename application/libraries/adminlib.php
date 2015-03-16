@@ -23,4 +23,8 @@ class AdminLib extends BaseLib{
         }
         return $result;
     }
+
+    public function setConfig($config = array()) {
+
+    }
 }

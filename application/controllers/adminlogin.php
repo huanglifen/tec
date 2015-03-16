@@ -31,7 +31,7 @@ class AdminLogin extends Controller {
             if($result) {
                 $user = array('userId' => $result->id, 'userName' => $result->name);
                 $this->session->set_userdata($user);
-                return $this->showView('admin/index');
+                return redirect('admin/index');
             }else{
                 $this->errorInfo['error'] = $this->lang->line('name_or_password_error');
                 $this->data['error'] = $this->errorInfo;
@@ -40,5 +40,12 @@ class AdminLogin extends Controller {
         }else{
             return $this->showView('admin/login');
         }
+    }
+
+    public function logout() {
+        $user = array('userId' => 0, 'userName' => '');
+        $this->session->unset_userdata($user);
+
+        return redirect('adminlogin/index');
     }
 }
