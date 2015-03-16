@@ -32,7 +32,7 @@ class Admin extends Controller {
         $content['close'] = $this->getParam('close');
 
         $result = $this->adminlib->setConfig($content);
-        $this->showView('admin/index');
+        redirect('admin/index');
     }
     public function nav() {
         $this->checkLogin();

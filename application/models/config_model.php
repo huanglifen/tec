@@ -15,4 +15,10 @@ class Config_model extends CI_Model {
         );
         $this->db->insert($this->table, $data);
     }
+
+    public function getConfig() {
+        $sql = "select * from " . $this->table;
+
+        $query = $this->db->query($sql);
+    }
 }

@@ -7,6 +7,7 @@ class AdminLib extends BaseLib{
     function __construct() {
         parent::__construct();
         $this->ci->load->model('admin_model');
+        $this->ci->load->model('config_model');
     }
 
     /**
@@ -26,7 +27,7 @@ class AdminLib extends BaseLib{
 
     /**
      * 添加配置数据
-     * 
+     *
      * @param array $config
      */
     public function setConfig($config = array()) {

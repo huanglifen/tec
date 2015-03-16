@@ -37,7 +37,7 @@
                 <tr>
                     <td>站点标志</td>
                     <td class="no_right_border">
-                        <input type="file" name="siteLogo"/>
+                        <input type="text" name="siteLogo"/>
                     </td>
                 </tr>
                 <tr>
@@ -62,7 +62,7 @@
                     <td>是否关闭网站</td>
                     <td class="no_right_border">
                         是<input type="radio" name="close" value="1" />
-                        否<input type="radio" name="close" value="0"/>
+                        否<input type="radio" name="close" value="0" checked/>
                     </td>
                 </tr>
                 <tr>
