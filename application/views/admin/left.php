@@ -13,7 +13,7 @@
     </li>
     <li class="single_page <?php if($current == 4){echo 'current';}?>">
         <img class="nav_img" src="<?php echo $baseUrl; ?>public/images/admin_page.png">
-        <a href="<?php echo $baseUrl ?>admin/page">单页面管理</a>
+        <a href="<?php echo $baseUrl ?>admin/page">页面管理</a>
     </li>
     <li class="noBottom admin_user <?php if($current == 5){echo 'current';}?>">
         <img class="nav_img" src="<?php echo $baseUrl; ?>public/images/admin_user.png">

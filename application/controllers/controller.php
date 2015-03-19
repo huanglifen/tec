@@ -4,10 +4,15 @@ class Controller extends  CI_Controller {
     protected $data = array();
     protected $errorInfo = array();
     protected $langFile = 'common';
+    const USER_NOT_LOGIIN = 1001;
+    const RESPONSE_FAILURE = 200;
+    const RESPONSE_SUCCESS = 0;
 
     public function __construct() {
         parent::__construct();
         $this->load->library('session');
+        $this->load->helper('url');
+        $this->title = '华信杰通';
     }
 
     /**
@@ -29,6 +34,17 @@ class Controller extends  CI_Controller {
         if (! $userId) {
             redirect('adminlogin/index');
         }
+        $this->data['userName'] = $this->session->userdata('userName');
+    }
+
+    /**
+     * 判断用户是否已登录，未登录则输出响应
+     */
+    protected function isLogin() {
+        $userId = $this->session->userdata('userId');
+        if (! $userId) {
+            echo json_encode(array('status' => self::USER_NOT_LOGIIN));exit;
+        }
     }
 
     /**
@@ -38,7 +54,7 @@ class Controller extends  CI_Controller {
      */
     protected function showView($view) {
         $this->data['baseUrl'] = $this->config->item('base_url');
-        $this->data['title'] = '华信杰通';
+        $this->data['title'] = $this->title;
         $this->load->view($view, $this->data);
     }
 
@@ -105,5 +121,47 @@ class Controller extends  CI_Controller {
      */
     protected function checkMinLength($param, $length) {
         return strlen($param) >= $length;
+    }
+
+    /**
+     * 检查数据最大长度
+     *
+     * @param $param
+     * @param $length
+     * @return bool
+     */
+    protected function checkMaxLength($param, $length) {
+        return mb_strlen($param) <= $length;
+    }
+
+    protected function checkNumber($param) {
+        return preg_match('/(\d).*/', $param);
+    }
+
+    /**
+     * 上传文件
+     *
+     * @param $path
+     * @return bool
+     */
+    public function doUpload($path) {
+        $config['upload_path'] = $path;
+        $config['allowed_types'] = 'gif|jpg|png|jpeg|bmp';
+        $config['max_size'] = '2048';
+        $config['max_width'] = '1024';
+        $config['max_height'] = '768';
+        $config['overwrite'] = false;
+        $config['encrypt_name'] = true;
+
+        $this->load->library('upload', $config);
+
+        if(! $this->upload->do_upload()) {
+            $this->errorInfo['upload'] = $this->upload->display_errors();
+            return false;
+        }else{
+            return $this->upload->data();
+
+        }
+
     }
 }

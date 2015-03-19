@@ -7,6 +7,7 @@ if (! defined('BASEPATH')) {
 abstract class BaseLib {
 
     protected $ci;
+    const NUM_PER_PAGE = 10;
 
     function __construct() {
         $this->ci = &get_instance();
