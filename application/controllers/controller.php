@@ -13,6 +13,7 @@ class Controller extends  CI_Controller {
         $this->load->library('session');
         $this->load->helper('url');
         $this->title = '华信杰通';
+        $this->path = APPPATH . "../public/img/";
     }
 
     /**
@@ -34,7 +35,6 @@ class Controller extends  CI_Controller {
         if (! $userId) {
             redirect('adminlogin/index');
         }
-        $this->data['userName'] = $this->session->userdata('userName');
     }
 
     /**
@@ -55,6 +55,7 @@ class Controller extends  CI_Controller {
     protected function showView($view) {
         $this->data['baseUrl'] = $this->config->item('base_url');
         $this->data['title'] = $this->title;
+        $this->data['userName'] = $this->session->userdata('userName');
         $this->load->view($view, $this->data);
     }
 
@@ -94,7 +95,7 @@ class Controller extends  CI_Controller {
                     if($result == false) {
                         $this->lang->load($this->langFile);
                         $this->errorInfo[$param] = $this->lang->line($r['msg']);
-                        return false;
+                        break;
                     }
                 }
             }
@@ -134,8 +135,44 @@ class Controller extends  CI_Controller {
         return mb_strlen($param) <= $length;
     }
 
+    /**
+     * 判断是否是数字
+     *
+     * @param $param
+     * @return int
+     */
     protected function checkNumber($param) {
         return preg_match('/(\d).*/', $param);
+    }
+
+    /**
+     * 判断是否是url
+     *
+     * @param $param
+     * @return int
+     */
+    protected function checkUrl($param) {
+        return preg_match('/^(https:\/\/?|www\.).+/', $param);
+    }
+
+    /**
+     * 上传图片
+     *
+     * @param $bread
+     * @param $redirect
+     * @return array|void
+     */
+    public function uploadPic($bread, $redirect) {
+        $path = $this->path;
+        if($_FILES['userfile']['name'] != ''){
+            $_FILES['userfile']['name'] = iconv("UTF-8", 'GBK', $_FILES['userfile']['name']);
+            $fileInfo = $this->doUpload($path);
+            if($fileInfo === false) {
+                return false;
+            }
+            return array('origName' => iconv('GBK', 'UTF-8',$fileInfo['orig_name']), 'fileName' => $fileInfo['file_name']);
+        }
+        return false;
     }
 
     /**

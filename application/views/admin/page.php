@@ -21,7 +21,7 @@
                 <?php foreach($pages as $p) { ?>
                 <div class="small_page">
                     <div class="small_page_name"><?php echo $p->name; ?></div>
-                    <div class="small_page_alias"><?php echo $p->title; ?></div>
+                    <div class="small_page_alias"><?php echo $p->title?$p->title:"无"; ?></div>
                     <div class="small_page_operate"><span><a href="<?php echo $baseUrl.'admin/addpage/'.$p->id?>">编辑</a></span>|
                         <a href="javascript:;"><span class="JsDelete" data-id="<?php echo $p->id;?>">删除</span></a></div>
                 </div>

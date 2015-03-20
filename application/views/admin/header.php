@@ -21,6 +21,7 @@
                 <a href="<?php echo $baseUrl; ?>" target="_blank">查看站点</a>
             </li>
             <li>您好！<?php echo $userName ?></li>
+            <li class="noRight"><a href="<?php echo $baseUrl; ?>admin/changePassword">修改密码</a></li>
             <li class="noRight"><a href="<?php echo $baseUrl; ?>adminlogin/logout">退出</a></li>
         </ul>
 

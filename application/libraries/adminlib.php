@@ -12,6 +12,7 @@ class AdminLib extends BaseLib{
         $this->ci->load->model('indexrow_model');
         $this->ci->load->model('indexcolumn_model');
         $this->ci->load->model('page_model');
+        $this->ci->load->model('source_model');
     }
 
     /**
@@ -327,12 +328,27 @@ class AdminLib extends BaseLib{
      * @param $parent
      * @param $title
      * @param $keyword
-     *  @param $content
+     * @param $content
+     * @param $sort
+     * @param $pic
      * @param int $default
      * @return mixed
      */
-    public function addPage($name, $parent, $title, $keyword, $content, $default = 0) {
-        return $this->ci->page_model->addPage($name, $parent, $title, $keyword, $content, $default);
+    public function addPage($name, $parent, $title, $keyword, $content, $sort, $pic, $default = 0) {
+        $data = array(
+            'name' => $name,
+            'parent_id' => $parent,
+            'title' => $title,
+            'keyword' => $keyword,
+            'default' => $default,
+            'content' => $content,
+            'sort' => $sort,
+            'time' => date('Y-m-d H:i:s', time())
+        );
+        if($pic != false) {
+            $data['picture'] =  $pic;
+        }
+        return $this->ci->page_model->addPage($data);
     }
 
     /**
@@ -344,11 +360,25 @@ class AdminLib extends BaseLib{
      * @param $title
      * @param $keyword
      * @param $content
+     * @param $sort
+     * @param $pic
      * @param int $default
      * @return mixed
      */
-    public function editPage($id, $name, $parent, $title, $keyword, $content, $default = 0) {
-        return $this->ci->page_model->editPage($id, $name, $parent, $title, $keyword, $content, $default);
+    public function editPage($id, $name, $parent, $title, $keyword, $content, $sort, $pic, $default = 0) {
+        $data = array(
+            'name' => $name,
+            'parent_id' => $parent,
+            'title' => $title,
+            'keyword' => $keyword,
+            'default' => $default,
+            'content' => $content,
+            'sort' => $sort,
+        );
+        if($pic != false) {
+            $data['picture'] =  $pic;
+        }
+        return $this->ci->page_model->editPage($id, $data);
     }
 
     /**
@@ -358,5 +388,149 @@ class AdminLib extends BaseLib{
      */
     public function deletePage($id) {
         return $this->ci->page_model->deletePage($id);
+    }
+
+    /**
+     * 按主键查询资源信息
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function getSourceById($id) {
+        return $this->ci->source_model->getPictureById($id);
+    }
+
+    /**
+     * 添加或者更新一个图片资源
+     *
+     * @param $picture
+     * @param $id
+     * @return mixed
+     */
+    public function addOrUpdatePicture($picture, $id) {
+        if($id) {
+            return $this->ci->source_model->updateSourceById($id, $picture);
+        } else {
+            $picture->type = 1;
+            $picture->time = date('Y-m-d H:i:s', time());
+            return $this->ci->source_model->addSource($picture);
+        }
+    }
+
+    /**
+     * 按页获取首页图片
+     *
+     * @param $page
+     * @param int $limit
+     * @return mixed
+     */
+    public function getIndexPicture($page, $limit = self::NUM_PER_PAGE) {
+         $offset = ($page -1 ) * $limit;
+         return $this->ci->source_model->getSourceByType(1, $offset, $limit);
+    }
+
+    /**
+     * 统计首页图片
+     *
+     * @return mixed
+     */
+    public function countIndexPicture() {
+        return $this->ci->source_model->countSourceByType(1);
+    }
+
+    /**
+     * 删除一张图片
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function deleteSource($id) {
+        return $this->ci->source_model->deleteSource($id);
+    }
+
+    /**
+     * 按主键获取管理员
+     *
+     * @param $id
+     * @return mixed
+     */
+    public function getAdminById($id) {
+        return $this->ci->admin_model->getAdminById($id);
+    }
+
+    /**
+     * 统计所有管理员
+     *
+     * @return mixed
+     */
+    public function countAdmins() {
+        return $this->ci->admin_model->countAdmins();
+    }
+
+    /**
+     * 按页获取管理员记录
+     *
+     * @param $page
+     * @param int $limit
+     * @return mixed
+     */
+    public function getAdmins($page, $limit = self::NUM_PER_PAGE) {
+        $offset = ($page - 1) * $limit;
+        return $this->ci->admin_model->getAdmins($limit, $offset);
+    }
+
+    /**
+     * 添加一个管理员
+     *
+     * @param $name
+     * @param $password
+     * @return mixed
+     */
+    public function addAdmin($name, $password) {
+        $password = md5($password);
+        $data = array(
+            'name' => $name,
+            'password' => md5($password),
+            'status' => Admin_model::STATUS_OPEN,
+            'time' => date('Y-m-d H:i:s', time()),
+            'default' => Admin_model::NOT_DEFAULT,
+        );
+        return $this->ci->admin_model->addAdmin($data);
+    }
+
+    /**
+     * 更新管理员状态
+     *
+     * @param $id
+     * @param $isDefault
+     * @param $status
+     * @return bool
+     */
+    public function changeStatus($id, $isDefault, $status) {
+        if($isDefault) {
+            return false;
+        }
+
+        $changeArr = array(
+            Admin_model::STATUS_OPEN => Admin_model::STATUS_CLOSE,
+            Admin_model::STATUS_CLOSE => Admin_model::STATUS_OPEN
+        );
+        $status = $changeArr[$status];
+        $data['status'] = $status;
+        return $this->ci->admin_model->updateAdminById($data, $id);
+    }
+
+    /**
+     * 修改管理员密码
+     *
+     * @param $password
+     * @param $id
+     * @return mixed
+     */
+    public function changePassword($password, $id) {
+        $data = array(
+            'password' => md5($password)
+        );
+        return $this->ci->admin_model->updateAdminById($data, $id);
     }
 }

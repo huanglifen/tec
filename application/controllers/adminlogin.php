@@ -29,7 +29,7 @@ class AdminLogin extends Controller {
             }
             $result = $this->adminlib->getAdminByNameAndPwd($name, $password);
             if($result) {
-                $user = array('userId' => $result->id, 'userName' => $result->name);
+                $user = array('userId' => $result->id, 'userName' => $result->name, 'userDefault' => $result->default);
                 $this->session->set_userdata($user);
                 return redirect('admin/index');
             }else{

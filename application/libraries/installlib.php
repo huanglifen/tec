@@ -72,7 +72,7 @@ class InstallLib extends BaseLib{
 
     protected function initAdmin($username, $password, $tablePrefix) {
         $time = date('Y-m-d H:i:s', time());
-        $sql = "insert into " .$tablePrefix ."admin (name, password, status, time) value('$username', '$password', 0, '$time')";
+        $sql = "insert into " .$tablePrefix ."admin (name, password, status, time, default) value('$username', '$password', 0, '$time', 1)";
         $result = $this->ci->db->query($sql);
 
         return $result;

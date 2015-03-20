@@ -9,7 +9,7 @@
     </li>
     <li class="index_pic <?php if($current == 3){echo 'current';}?>" >
         <img class="nav_img" src="<?php echo $baseUrl; ?>public/images/admin_index.png">
-        <a href="<?php echo $baseUrl ?>admin/pic">首页轮播图</a>
+        <a href="<?php echo $baseUrl ?>admin/picture">首页轮播图</a>
     </li>
     <li class="single_page <?php if($current == 4){echo 'current';}?>">
         <img class="nav_img" src="<?php echo $baseUrl; ?>public/images/admin_page.png">
@@ -17,6 +17,6 @@
     </li>
     <li class="noBottom admin_user <?php if($current == 5){echo 'current';}?>">
         <img class="nav_img" src="<?php echo $baseUrl; ?>public/images/admin_user.png">
-        <a href="<?php echo $baseUrl ?>admin/user">管理员设置</a>
+        <a href="<?php echo $baseUrl ?>admin/administrator">管理员设置</a>
     </li>
 </ul>

@@ -34,7 +34,7 @@ class Admin extends Controller {
 
         $content = array();
 
-        $path = APPPATH . "../public/img/";
+        $path = $this->path;
         if($_FILES['userfile']['name'] != ''){
             $_FILES['userfile']['name'] = iconv("UTF-8", 'GBK', $_FILES['userfile']['name']);
             $fileInfo = $this->doUpload($path);
@@ -166,8 +166,18 @@ class Admin extends Controller {
         $id = $this->getParam('id', 'required');
 
         if($this->errorInfo) {
+            $nav = $this->adminlib->getNavById($id);
+            if(count($nav) <= 0) {
+                redirect('admin/nav');
+            }
+
+            $pages = $this->adminlib->getParentPage();
+            $this->data['pages'] = $pages;
+            $this->data['nav'] = $nav;
+            $this->data['id'] = $id;
+
             $this->data['error'] = $this->errorInfo;
-            return $this->showView('admin/addnav');
+            return $this->showView('admin/editnav');
         }
 
         $parentId = 0;
@@ -181,9 +191,101 @@ class Admin extends Controller {
 
     }
 
-    public function pic() {
+    /**
+     * 首页轮播图页面
+     *
+     * @param int $page
+     */
+    public function picture($page = 1) {
         $this->checkLogin();
-        $this->showView('admin/index_pic');
+
+        $total = $this->adminlib->countIndexPicture();
+        $totalPage = ceil($total/BaseLib::NUM_PER_PAGE);
+
+        $page = $page ? ($page <= $totalPage ? $page : $totalPage) : 1;
+        $pictures = $this->adminlib->getIndexPicture($page);
+
+        $imageUrl = 'public/img/';
+        $this->data = compact('pictures', 'totalPage', 'page', 'imageUrl');
+        $this->showView('admin/picture');
+    }
+
+    /**
+     * 新增/编辑图片页面或者执行新增/编辑图片操作
+     * @param int $id
+     */
+    public function picOperate( ) {
+        $this->checkLogin();
+        if(! isset($_REQUEST['id'])) {
+            $id = 0;
+        } else{
+            $id = $this->getParam('id');
+        }
+
+        if ($id) {
+            $picture = $this->adminlib->getSourceById($id);
+        } else {
+            $picture = new stdClass();
+            $picture->name = '';
+            $picture->sort = 50;
+            $picture->link = '';
+            $picture->origname = '';
+            $picture->path = '';
+        }
+
+        $error = array(
+            'name' => '',
+            'sort' => '',
+            'upload' => '',
+            'link' => ''
+        );
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $picture->name = $this->getParam('name', 'required{error_pic_name_required}|maxLength:20{error_pic_name_larger}');
+            $picture->sort = $this->getParam('sort', 'required{error_sort_required}|number{error_number_required}');
+            $picture->link = $this->getParam('link', 'required{error_link_required}|maxLength:100{error_link_larger|url{error_not_url}');
+            if ($_FILES['userfile']['name'] != '') {
+                $file = $this->uploadPic('编辑图片', 'admin/picture');
+                if ($file != false) {
+                    $picture->origname = $file['origName'];
+                    $picture->path = $file['fileName'];
+                }
+            } elseif (!$id) {
+                $picture->origname = $this->getParam('origname', 'required');
+                $picture->path = $this->getParam('path', 'required');
+                if (!$picture->path || !$picture->origname) {
+                    $this->errorInfo['upload'] = '请上传图片';
+                }
+            }
+
+            if ($this->errorInfo) {
+                $error = array_merge($error, $this->errorInfo);
+                $this->data = compact('error', 'id', 'picture');
+                return $this->showView('admin/picoperate');
+            }
+
+            $result = $this->adminlib->addOrUpdatePicture($picture, $id);
+            if ($result) {
+                $this->data['bread'] = '编辑图片';
+                $this->data['success'] = '编辑图片成功!';
+                $this->data['redirect'] = 'admin/picture';
+                $this->data['current'] = 3;
+                $this->showView('admin/success');
+            }
+        }
+        $this->data = compact('error', 'id', 'picture');
+        return $this->showView('admin/picoperate');
+    }
+
+    /**
+     * 删除一张图片
+     */
+    public function deletePic() {
+        $this->isLogin();
+
+        $id = $this->getParam('id', 'required');
+        $this->adminlib->deleteSource($id);
+        echo json_encode(array('status' => 0));
     }
 
     /**
@@ -231,12 +333,15 @@ class Admin extends Controller {
      */
     public function addPageAction() {
         $this->checkLogin();
+
         $name = htmlspecialchars($this->getParam('name', 'required{error_page_name_required}|maxLength:15{error_page_name_larger}'));
         $parent = $this->getParam('parent');
         if($parent == 0) {
             $title = $this->getParam('title', 'required{error_page_title_required}|maxLength:15{error_page_title_larger}');
+            $sort = 1;
         }else{
             $title = '';
+            $sort = $this->getParam('sort', 'required{error_page_sort_required|number{error_number_required}');
         }
         $keyword = $this->getParam('keyword', 'required{error_keyword_required}|maxLength:15{error_page_keyword_larger}');
         $content = $this->getParam('content', 'required{error_keyword_required}');
@@ -260,14 +365,20 @@ class Admin extends Controller {
             return $this->showView('admin/addpage');
         }
 
+        if($_FILES['userfile']['name'] != '') {
+            $pic = json_encode($this->uploadPic('页面管理', 'admin/page'));
+        }else{
+            $pic = false;
+        }
+
         if($id == 0) {
             $this->data['bread'] = '添加页面';
             $this->data['success'] = '新增页面成功';
-            $this->adminlib->addPage($name, $parent, $title, $keyword, $content);
+            $this->adminlib->addPage($name, $parent, $title, $keyword, $content, $sort, $pic);
         } else {
             $this->data['bread'] = '更新页面';
             $this->data['success'] = '更新页面成功';
-            $this->adminlib->editPage($id, $name, $parent, $title, $keyword, $content);
+            $this->adminlib->editPage($id, $name, $parent, $title, $keyword, $content, $sort, $pic);
         }
 
         $this->data['redirect'] = 'admin/page';
@@ -381,9 +492,125 @@ class Admin extends Controller {
         echo json_encode(array('status' => $status));
     }
 
-    public function user() {
+
+    /**
+     * 显示管理员列表页面
+     */
+    public function administrator($page = 1) {
         $this->checkLogin();
+
+        $adminId = $this->session->userdata('userId');
+        $admin = $this->adminlib->getAdminById($adminId);
+        $admin->hasRight = $admin->default;
+
+        $total = $this->adminlib->countAdmins();
+        $totalPage = ceil($total/BaseLib::NUM_PER_PAGE);
+        $page = $page ? ($page <= $totalPage ? $page : $totalPage) : 1;
+
+        $admins = $this->adminlib->getAdmins($page);
+
+        $this->data = compact('admin', 'admins', 'totalPage', 'page');
         $this->showView('admin/admin');
+    }
+
+    /**
+     * 显示添加一个管理员页面或者执行添加一个管理员操作
+     */
+    public function addAdmin() {
+        $this->checkLogin();
+
+        $error = array(
+            'name' => '',
+            'password' => '',
+            'confirm' => ''
+        );
+        $name = '';
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $name = $this->getParam('name','required{error_admin_name_required}|maxLength:50{error_name_too_large_50}');
+            $password = $this->getParam('password', 'required{error_password_required}|minLength:6{error_password_too_short_6}|maxLength:50{error_password_too_large_50}');
+            $confirm = $this->getParam('confirm', 'required{error_confirm_password_required}');
+
+            if((! array_key_exists('password', $this->errorInfo)) && ($password != $confirm)) {
+                $this->errorInfo['password'] = '两次输入密码不一致！';
+            }
+
+            if(! $this->errorInfo) {
+                $this->adminlib->addAdmin($name, $password);
+                $this->data['success'] = '添加管理员成功！';
+                $this->data['bread'] = '新增管理员';
+                $this->data['redirect'] = 'admin/administrator';
+                return $this->showView('admin/success');
+            }
+            $error = array_merge($error, $this->errorInfo);
+        }
+
+        $this->data = compact('error', 'name');
+        $this->showView('admin/addadmin');
+    }
+
+    /**
+     * 修改一个管理员的状态
+     */
+    public function changeStatus() {
+        $this->isLogin();
+
+        $id = $this->getParam('id', 'required');
+        $admin = $this->adminlib->getAdminById($id);
+
+        $return = array('status' => self::RESPONSE_SUCCESS);
+        if(! $admin) {
+            $return['status'] = self::RESPONSE_FAILURE;
+        }else{
+            $result = $this->adminlib->changeStatus($id, $admin->default, $admin->status);
+        }
+
+        if(! $result) {
+            $return['status'] = self::RESPONSE_FAILURE;
+        }
+        echo json_encode($return);
+    }
+
+    /**
+     * 修改管理员密码
+     */
+    public function changePassword() {
+        $this->checkLogin();
+        $error = array(
+            'oldPassword' => '',
+            'password' => '',
+            'confirm' => ''
+        );
+
+        if($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $oldPassword = $this->getParam('oldPassword', 'required{error_old_password_required}');
+            $password = $this->getParam('password', 'required{error_new_password_required}|minLength:6{error_password_too_short_6}');
+            $confirm = $this->getParam('confirm', 'required{error_confirm_password_required}');
+
+            if((! array_key_exists('password', $this->errorInfo)) && ($password != $confirm)) {
+                $this->errorInfo['password'] = '两次输入密码不一致！';
+            }
+
+            if(! $this->errorInfo) {
+                $id = $this->session->userdata('userId');
+                $admin = $this->adminlib->getAdminById($id);
+
+                if($admin->password != md5($oldPassword)) {
+                    $this->errorInfo['oldPassword'] = '原密码输入错误';
+                }
+                if(! $this->errorInfo) {
+                    $this->adminlib->changePassword($password, $id);
+                    $this->data['success'] = '修改密码成功！！';
+                    $this->data['bread'] = '修改密码';
+                    $this->data['redirect'] = 'admin/index';
+                    return $this->showView('admin/success');
+                }
+            }
+            $error = array_merge($error, $this->errorInfo);
+        }
+
+        $this->data = compact('error');
+        $this->showView('admin/changePassword');
     }
 
 }
