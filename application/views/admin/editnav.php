@@ -22,7 +22,7 @@
                     </ul>
                 </div>
                 <div class="nav_main">
-                    <form action="<?php echo $baseUrl ?>admin/editNavAction" method="post">
+                    <form action="<?php echo $baseUrl ?>admin/editNavAction" method="post" enctype="multipart/form-data">
                         <input type="hidden"  name="id" value="<?php echo $id;?>"/>
                         <table class="wrap_table">
                             <tr>
@@ -85,10 +85,25 @@
                                            name="linkC" />
                                         <select name="linkS" class="my_select <?php if($category ==  3) { ?> display_none <?php } ?>">
                                             <option value="<?php echo $baseUrl;?>">首页</option>
+                                            <?php foreach($pages as $page) {?>
+                                                <option value="<?php echo $page->id;?>"><?php echo $page->name;?></option>
+                                            <?php } ?>
                                         </select>
                                 </td>
                             </tr>
                             <tr>
+                            <tr >
+                                <td>logo</td>
+                                <td class="no_right_border">
+                                    <div style="float:left;margin-top:15px;">
+                                        <input type="file" name="userfile" size="20" />
+                                    </div>
+                                    <div class="success">当前logo ：<?php if($nav->logo) {?>
+                                        <img style="height:30px;" src="<?php echo $baseUrl."public/img/".$nav->logo ?>" alt="<?php echo $nav->logo ?>"/>
+                                        <?php } else { echo '无'; }?>
+                                    </div>
+                                </td>
+                            </tr>
                                 <td class="no_bottom_border"></td>
                                 <td class="no_right_border no_bottom_border">
                                     <input type="submit" class="button" value="提交"/>

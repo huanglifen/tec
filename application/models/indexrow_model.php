@@ -35,9 +35,6 @@ class Indexrow_model extends CI_Model {
     /**
      * 按条件返回区域记录
      *
-     * @param $limit
-     * @param $offset
-     *
      * @return array
      */
     public function getRows() {
@@ -89,6 +86,16 @@ class Indexrow_model extends CI_Model {
         }
     }
 
+    /**
+     * 按主键编辑区域记录
+     *
+     * @param $id
+     * @param $name
+     * @param $height
+     * @param $sort
+     * @param $columnNum
+     * @return bool
+     */
     public function editRow($id, $name, $height, $sort, $columnNum) {
         $data = array(
              'name' => $name,
@@ -99,5 +106,23 @@ class Indexrow_model extends CI_Model {
         $this->db->where('id', $id);
         $this->db->update($this->table, $data);
         return true;
+    }
+
+    /**
+     * 根据排序获取区域记录
+     *
+     * @param $offset
+     * @param $limit
+     * @return array
+     */
+    public function getRowsOrderBySort($offset, $limit) {
+        $query = $this->db->order_by('sort', 'asc')->order_by('id', 'asc')->get($this->table, $limit, $offset);
+
+        if($query->num_rows() > 0) {
+            $result = $query->result();
+            return $result;
+        }else{
+            return array();
+        }
     }
 }

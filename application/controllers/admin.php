@@ -97,6 +97,14 @@ class Admin extends Controller {
     public function addNavAction($type) {
         $this->checkLogin();
 
+        $logo = '';
+        if ($_FILES['userfile']['name'] != '') {
+            $file = $this->uploadPic();
+            if ($file != false) {
+                $logo = $file['fileName'];
+            }
+        }
+
         $name = $this->getParam('name', 'required{error_nav_name_required}');
         $position = $this->getParam('position', 'required{error_nav_position_required}');
         $sort = $this->getParam('sort', 'required{error_nav_sort_required}|number{error_number_required}');
@@ -109,7 +117,7 @@ class Admin extends Controller {
         }
 
         $parentId = 0;
-        $this->adminlib->addNav($name, $position, $sort, $link, $parentId);
+        $this->adminlib->addNav($name, $position, $sort, $link, $parentId, $logo);
 
         $this->data['success'] = '添加导航成功！';
         $this->data['bread'] = '自定义导航';
@@ -165,6 +173,14 @@ class Admin extends Controller {
 
         $id = $this->getParam('id', 'required');
 
+        $logo = '';
+        if ($_FILES['userfile']['name'] != '') {
+            $file = $this->uploadPic();
+            if ($file != false) {
+                $logo = $file['fileName'];
+            }
+        }
+
         if($this->errorInfo) {
             $nav = $this->adminlib->getNavById($id);
             if(count($nav) <= 0) {
@@ -181,7 +197,7 @@ class Admin extends Controller {
         }
 
         $parentId = 0;
-        $this->adminlib->editNav($name, $position, $sort, $link, $parentId, $id);
+        $this->adminlib->editNav($name, $position, $sort, $link, $parentId, $id, $logo);
 
         $this->data['success'] = '编辑导航成功！';
         $this->data['bread'] = '自定义导航';
@@ -202,7 +218,8 @@ class Admin extends Controller {
         $total = $this->adminlib->countIndexPicture();
         $totalPage = ceil($total/BaseLib::NUM_PER_PAGE);
 
-        $page = $page ? ($page <= $totalPage ? $page : $totalPage) : 1;
+        $page = $page ? ($page <= $totalPage || $totalPage <= 0 ? $page : $totalPage) : 1;
+
         $pictures = $this->adminlib->getIndexPicture($page);
 
         $imageUrl = 'public/img/';
@@ -297,7 +314,7 @@ class Admin extends Controller {
         $total = $this->adminlib->countPages();
         $totalPage = ceil($total/BaseLib::NUM_PER_PAGE);
 
-        $page = $page ? ($page <=$totalPage ? $page : $totalPage) : 1;
+        $page = $page ? ($page <=$totalPage || $totalPage <= 0? $page : $totalPage) : 1;
         $pages = $this->adminlib->getPages($page);
 
         $this->data['totalPage'] = $totalPage;

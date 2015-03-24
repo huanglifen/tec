@@ -21,7 +21,7 @@ $config['base_url']	= 'http://127.0.0.1:81/tec/';
 | Index File
 |--------------------------------------------------------------------------
 |
-| Typically this will be your index.php file, unless you've renamed it to
+| Typically this will be your indexbak.php file, unless you've renamed it to
 | something else. If you are using mod_rewrite to remove the page set this
 | variable so that it is blank.
 |
@@ -147,7 +147,7 @@ $config['permitted_uri_chars'] = 'a-z 0-9~%.:_\-';
 |
 | The other items let you set the query string 'words' that will
 | invoke your controllers and its functions:
-| example.com/index.php?c=controller&m=function
+| example.com/indexbak.php?c=controller&m=function
 |
 | Please note that some of the helpers won't work as expected when
 | this feature is enabled, since CodeIgniter is designed primarily to

@@ -1,7 +1,7 @@
 <?php
 require_once 'baselib.php';
 /**
- * 安装类lib层
+ * 管理类lib层
  */
 class AdminLib extends BaseLib{
     function __construct() {
@@ -71,8 +71,8 @@ class AdminLib extends BaseLib{
      *
      * @return mixed
      */
-    public function addNav($name, $position, $sort, $link, $parentId) {
-        return $this->ci->nav_model->addNav($name, $position, $sort, $link, $parentId);
+    public function addNav($name, $position, $sort, $link, $parentId, $logo = '') {
+        return $this->ci->nav_model->addNav($name, $position, $sort, $link, $parentId, $logo);
     }
 
     /**
@@ -121,8 +121,8 @@ class AdminLib extends BaseLib{
      *
      * @return mixed
      */
-    public function editNav($name, $position, $sort, $link, $parentId, $id) {
-        return $this->ci->nav_model->editNav($name, $position, $sort, $link, $parentId, $id);
+    public function editNav($name, $position, $sort, $link, $parentId, $id, $logo = '') {
+        return $this->ci->nav_model->editNav($name, $position, $sort, $link, $parentId, $id, $logo);
     }
 
     /**

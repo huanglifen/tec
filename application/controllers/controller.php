@@ -12,7 +12,7 @@ class Controller extends  CI_Controller {
         parent::__construct();
         $this->load->library('session');
         $this->load->helper('url');
-        $this->title = '华信杰通';
+        $this->title = '北京华信杰通';
         $this->path = APPPATH . "../public/img/";
     }
 
@@ -53,6 +53,10 @@ class Controller extends  CI_Controller {
      * @param $view
      */
     protected function showView($view) {
+        if(isset($_GET['nav'])) {
+            $this->data['navId'] = $this->input->get('nav');
+        }
+
         $this->data['baseUrl'] = $this->config->item('base_url');
         $this->data['title'] = $this->title;
         $this->data['userName'] = $this->session->userdata('userName');
@@ -152,7 +156,7 @@ class Controller extends  CI_Controller {
      * @return int
      */
     protected function checkUrl($param) {
-        return preg_match('/^(https:\/\/?|www\.).+/', $param);
+        return preg_match('/^(https?:\/\/?|www\.).+/', $param);
     }
 
     /**
@@ -162,7 +166,7 @@ class Controller extends  CI_Controller {
      * @param $redirect
      * @return array|void
      */
-    public function uploadPic($bread, $redirect) {
+    public function uploadPic($bread = '', $redirect = '') {
         $path = $this->path;
         if($_FILES['userfile']['name'] != ''){
             $_FILES['userfile']['name'] = iconv("UTF-8", 'GBK', $_FILES['userfile']['name']);

@@ -138,7 +138,7 @@
  */
 	$CFG =& load_class('Config', 'core');
 
-	// Do we have any manually set config items in the index.php file?
+	// Do we have any manually set config items in the indexbak.php file?
 	if (isset($assign_to_config))
 	{
 		$CFG->_assign_to_config($assign_to_config);

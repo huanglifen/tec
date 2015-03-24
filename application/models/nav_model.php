@@ -4,6 +4,10 @@
  * 导航model
  */
 class Nav_model extends CI_Model {
+    const TYPE_MAIN = 1;
+    const TYPE_HEAD = 2;
+    const TYPE_BOTTOM = 3;
+
     function __construct() {
         parent::__construct();
         $this->load->database();
@@ -21,7 +25,7 @@ class Nav_model extends CI_Model {
      *
      * @return mixed
      */
-    public function addNav($name, $position, $sort, $link, $parentId) {
+    public function addNav($name, $position, $sort, $link, $parentId, $logo) {
         $data = array(
             'name' => $name,
             'link' => $link,
@@ -29,6 +33,7 @@ class Nav_model extends CI_Model {
             'type' => $position,
             'parent_id' => $parentId,
             'time' => date('Y-m-d H:i:s', time()),
+            'logo' => $logo,
         );
         return $this->db->insert($this->table, $data);
     }
@@ -45,6 +50,23 @@ class Nav_model extends CI_Model {
     public function getNav($type, $offset, $limit) {
         $sql = "select * from " . $this->table ." where type = '" .$type . "' order by time desc limit $offset,$limit";
         $query = $this->db->query($sql);
+        if($query->num_rows() > 0) {
+            return $query->result();
+        }else{
+            return array();
+        }
+    }
+
+    /**
+     * 按照排序属性升序获取导航记录
+     *
+     * @param $type
+     * @param $offset
+     * @param $limit
+     * @return array
+     */
+    public function getNavOrderBySort($type, $offset, $limit) {
+        $query = $this->db->order_by('sort', 'asc')->order_by('id', 'asc')->where('type', $type)->get($this->table, $limit, $offset);
         if($query->num_rows() > 0) {
             return $query->result();
         }else{
@@ -98,13 +120,14 @@ class Nav_model extends CI_Model {
         }
     }
 
-    public function editNav($name, $position, $sort, $link, $parentId, $id) {
+    public function editNav($name, $position, $sort, $link, $parentId, $id, $logo) {
         $data = array(
             'name' => $name,
             'type' => $position,
             'sort' => $sort,
             'link' => $link,
             'parent_id' => $parentId,
+            'logo' => $logo
         );
 
         $this->db->where('id', $id);

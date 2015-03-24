@@ -6,6 +6,9 @@
  * 资源可为图片，文件等
  */
 class Source_model extends CI_Model {
+
+    const TYPE_INDEX = 1; //首页资源
+
     function __construct() {
         parent::__construct();
         $this->load->database();
@@ -62,6 +65,24 @@ class Source_model extends CI_Model {
      */
     public function getSourceByType($type, $offset, $limit) {
         $query = $this->db->where('type', $type)->get($this->table, $limit, $offset);
+        if($query->num_rows() > 0) {
+            $result = $query->result();
+            return $result;
+        }else{
+            return array();
+        }
+    }
+
+    /**
+     * 按排序升序获取类型为$type的资源
+     *
+     * @param $type
+     * @param $offset
+     * @param $limit
+     * @return array
+     */
+    public function getSourceByTypeOrderBySort($type, $offset, $limit) {
+        $query = $this->db->where('type', $type)->order_by('sort', 'asc')->get($this->table, $limit, $offset);
         if($query->num_rows() > 0) {
             $result = $query->result();
             return $result;

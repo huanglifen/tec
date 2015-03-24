@@ -21,7 +21,7 @@
                 </div>
                 <div class="nav_main">
                     <div class="JsTabPage <?php if($type == 2 ){ ?>display_none <?php } ?>">
-                        <form action="<?php echo $baseUrl?>admin/addNavAction/1" method="post">
+                        <form action="<?php echo $baseUrl?>admin/addNavAction/1" method="post"  enctype="multipart/form-data">
                             <table class="wrap_table">
                                 <tr>
                                     <td width="150px">导航名称</td>
@@ -55,7 +55,18 @@
                                     <td class="no_right_border">
                                       <select name="link" class="my_select">
                                           <option value="<?php echo $baseUrl;?>">首页</option>
+                                          <?php foreach($pages as $page) {?>
+                                              <option value="<?php echo $page->id;?>"><?php echo $page->name;?></option>
+                                          <?php } ?>
                                       </select>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td>logo</td>
+                                    <td class="no_right_border">
+                                        <div style="float:left;margin-top:15px;">
+                                            <input type="file" name="userfile" size="20" />
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -102,6 +113,14 @@
                                     <td class="no_right_border">
                                         <div style="float:left;margin-right:10px;"><input type="text" class="input_text long" name="link"/></div>
                                         <div class="error "><?php if($type == 2){echo $linkError;}?></div>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td>logo</td>
+                                    <td class="no_right_border">
+                                        <div style="float:left;margin-top:15px;">
+                                            <input type="file" name="userfile" size="20" />
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
