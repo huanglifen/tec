@@ -60,7 +60,7 @@
                             <?php
                             $category = 1;
                             if(! preg_match('/^(https?:\/\/|www\.).*/', $nav->link)) {
-                                $link = $baseUrl . "pages/".$nav->link;
+                                $link = $baseUrl . "page/".$nav->link;
                             }else{
                                 if($nav->link != $baseUrl){
                                     $category = 3;
@@ -86,7 +86,7 @@
                                         <select name="linkS" class="my_select <?php if($category ==  3) { ?> display_none <?php } ?>">
                                             <option value="<?php echo $baseUrl;?>">首页</option>
                                             <?php foreach($pages as $page) {?>
-                                                <option value="<?php echo $page->id;?>"><?php echo $page->name;?></option>
+                                                <option value="<?php echo $page->id;?>" <?php if($page->id == $nav->link) {?>selected<?php } ?>><?php echo $page->name;?></option>
                                             <?php } ?>
                                         </select>
                                 </td>

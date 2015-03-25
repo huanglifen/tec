@@ -53,10 +53,6 @@ class Controller extends  CI_Controller {
      * @param $view
      */
     protected function showView($view) {
-        if(isset($_GET['nav'])) {
-            $this->data['navId'] = $this->input->get('nav');
-        }
-
         $this->data['baseUrl'] = $this->config->item('base_url');
         $this->data['title'] = $this->title;
         $this->data['userName'] = $this->session->userdata('userName');
@@ -156,7 +152,7 @@ class Controller extends  CI_Controller {
      * @return int
      */
     protected function checkUrl($param) {
-        return preg_match('/^(https?:\/\/?|www\.).+/', $param);
+        return preg_match('/^(https?:\/\/.+|www\..+|javascript:;$|#$)/', $param);
     }
 
     /**

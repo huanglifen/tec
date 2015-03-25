@@ -44,7 +44,7 @@
                             );
                             $pos = $positionArr[$nav->type];
                             if(! preg_match('/^(https?:\/\/|www\.).*/', $nav->link)) {
-                                $link = $baseUrl . "pages/".$nav->link;
+                                $link = $baseUrl . "page/".$nav->link;
                             }else{
                                 $link = $nav->link;
                             }

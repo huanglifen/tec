@@ -118,6 +118,7 @@ class AdminLib extends BaseLib{
      * @param $link
      * @param $parentId
      * @param $id
+     * @param $logo
      *
      * @return mixed
      */

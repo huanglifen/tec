@@ -110,6 +110,7 @@
                             <input type="text" class="input_text long" name="keyword"
                                    value="<?php echo $keyword ?>"
                                 />
+                                （用逗号,分隔关键字）
                                 </div>
                             <div class="error"><?php echo $keywordError; ?></div>
                         </td>

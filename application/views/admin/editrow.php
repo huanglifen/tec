@@ -112,8 +112,9 @@
                 var columnId = "<?php echo $column->id; ?>";
                 var width = "<?php echo $column->width; ?>";
                 var sort = "<?php echo $column->sort; ?>";
-                var content = '<?php echo $column->content; ?>';
-                var data = {"columnId":columnId, "width" : width, "sort" :sort, "content" : content};
+                <?php $content = str_replace(array("\r\n", "\r", "\n"),"",$column->content);?>
+                var content = '<?php echo $content?>';
+                var data = {"columnId":columnId, "width" : width, "sort" :sort, "content" :content};
                 columns.push(data);
                 <?php } ?>
 

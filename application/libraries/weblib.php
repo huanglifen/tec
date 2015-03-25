@@ -103,6 +103,64 @@ class WebLib extends BaseLib{
         return $this->ci->source_model->getSourceByTypeOrderBySort(1, 0, 10);
     }
 
+    /**
+     * 获取页面信息
+     * 并获取父页面、兄弟页面相关信息
+     *
+     * @param $pageId
+     * @return array|bool
+     */
+    public function getPageInfo($pageId) {
+        $page = $this->ci->page_model->getPageById($pageId);
+        if(! $page) {
+            return false;
+        }
+        if($page->parent_id) {
+            $parent = $this->ci->page_model->getPageById($page->parent_id);
+            $siblings = $this->ci->page_model->getPagesByParentId($page->parent_id);
+        }else{
+            $parent = $page;
+            $siblings = $this->ci->page_model->getPagesByParentId($page->id);
+        }
 
+        $result = compact('page', 'parent', 'siblings');
+        return $result;
+    }
 
+    /**
+     * 根据导航链接的页面获取最前面的一个导航Id
+     * @param $pageId
+     * @return mixed
+     */
+    public function getNavIdByPageId($pageId) {
+        $result = $this->ci->nav_model->getNavByPageId($pageId);
+
+        if($result) {
+             $result = $result->id;
+        }
+        return $result;
+    }
+
+    /**
+     * 搜索
+     *
+     * @param $keyword
+     * @param $page
+     * @return mixed
+     */
+    public function searchKeyword($keyword, $page) {
+        $limit = self::NUM_PER_PAGE;
+        $offset = ($page - 1) * $limit;
+        return $this->ci->page_model->searchKeyword($keyword, $limit, $offset);
+    }
+
+    /**
+     * 统计含关键字$keyword的页面总数
+     *
+     * @param $keyword
+     * @return mixed
+     */
+    public function countSearchByKeyword($keyword) {
+        return $this->ci->page_model->countSearchByKeyword($keyword);
+    }
 }

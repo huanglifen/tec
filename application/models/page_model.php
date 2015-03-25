@@ -26,6 +26,22 @@ class Page_model extends CI_Model {
     }
 
     /**
+     * 根据父类获取页面信息
+     *
+     * @param $parentId
+     * @return array
+     */
+    public function getPagesByParentId($parentId) {
+        $query = $this->db->select('id, name')->where('parent_id', $parentId)->order_by('sort', 'asc')->get($this->table);
+
+        if($query->num_rows() > 0) {
+            $result = $query->result();
+            return $result;
+        }
+        return array();
+    }
+
+    /**
      * 按条件获取页面记录
      *
      * @param $key
@@ -101,5 +117,47 @@ class Page_model extends CI_Model {
      */
     public function countPages() {
         return $this->db->count_all($this->table);
+    }
+
+    /**
+     * 按关键字搜索页面
+     *
+     * @param $keyword
+     * @param $limit
+     * @param $offset
+     * @return array
+     */
+    public function searchKeyword($keyword, $limit, $offset) {
+        if(! $offset) {
+            $offset = 0;
+        }
+        if(! $limit) {
+            $limit = 0;
+        }
+        $this->db->distinct();
+        $this->db->like('name', $keyword);
+        $this->db->or_like('keyword', $keyword);
+        $this->db->or_like('content', $keyword);
+
+        $query = $this->db->get($this->table, $limit, $offset);
+        if($query->num_rows() > 0) {
+            $result = $query->result();
+            return $result;
+        }
+        return array();
+    }
+
+    /**
+     * 统计含关键字$keyword的页面总数
+     *
+     * @param $keyword
+     * @return mixed
+     */
+    public function countSearchByKeyword($keyword) {
+        $this->db->distinct();
+        $this->db->like('name', $keyword);
+        $this->db->or_like('keyword', $keyword);
+        $this->db->or_like('content', $keyword);
+        return $this->db->count_all_results($this->table);
     }
 }

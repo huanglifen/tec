@@ -40,6 +40,11 @@
 
 $route['default_controller'] = "index";
 $route['404_override'] = '';
+$route['page/(:num)'] = 'index/page/$1';
+$route['page'] = 'index/page';
+$route['close'] = 'index/close';
+$route['search/(:num)'] = 'index/search/$1';
+$route['search'] = 'index/search';
 
 
 /* End of file routes.php */

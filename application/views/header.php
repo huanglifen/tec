@@ -24,8 +24,15 @@ $navId = isset($navId) ? $navId : 0;
         </div>
         <div class="f_r right_top">
          <?php foreach($navs['head'] as $head) { ?>
+             <?php
+             if(! preg_match('/^(https?:\/\/|www\.).*/', $head->link)) {
+                 $linkH = $baseUrl . "page/".$head->link;
+             }else{
+                 $linkH = $head->link;
+             }
+             ?>
             <span class="head_nav"  <?php if($head->logo) { ?>style="background: url(<?php echo $baseUrl. $path . $head->logo ?>) no-repeat left 3px; padding-left:20px;" <?php } ?>>
-                <a href="<?php echo $baseUrl. $head->link; ?>"><?php echo $head->name ?></a>
+                <a href="<?php echo $linkH; ?>"><?php echo $head->name ?></a>
             </span>
          <?php } ?>
         </div>
@@ -36,12 +43,29 @@ $navId = isset($navId) ? $navId : 0;
         <ul class="nav_list" >
             <li <?php if($navId == 0) {?>class="on"<?php } ?> data-id="0"><a href="<?php echo $baseUrl;?>">首页</a></li>
             <?php foreach($navs['main'] as $main) { ?>
-            <li <?php if($navId == $main->id) { ?> class="on" <?php }?> data-id="<?php echo $main->id;?>"><a href="<?php echo $main->link.'?nav='.$main->id;?>"><?php echo $main->name;?></a></li>
+                <?php
+                if(! preg_match('/^(https?:\/\/|www\.).*/', $main->link)) {
+                    $link = $baseUrl . "page/".$main->link;
+                }else{
+                    $link = $main->link;
+                }
+                ?>
+            <li <?php if($navId == $main->id) { ?> class="on" <?php }?> data-id="<?php echo $main->id;?>"><a href="<?php echo $link.'?nav='.$main->id;?>"><?php echo $main->name;?></a></li>
             <?php }?>
         </ul>
         <div class="search f_r">
-            <input type="text" value="搜索华信杰通" class="search_input">
-            <input type="button" class="search_btn" name="">
+            <input type="text" placeholder="搜索华信杰通" class="search_input" id="keyword">
+            <input type="button" class="search_btn" name="" id="searchButton">
         </div>
     </div>
 </div>
+<script>
+    $("#searchButton").on('click', function() {
+        var keyword = $("#keyword").val();
+        if(! keyword) {
+            keyword = '华信杰通';
+        }
+        var url = baseUrl+'search?key='+keyword;
+        window.location.href = url;
+    });
+</script>

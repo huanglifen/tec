@@ -116,10 +116,22 @@ class Nav_model extends CI_Model {
             $result = $query->result();
             return $result[0];
         }else{
-            return array();
+            return false;
         }
     }
 
+    /**
+     * 更新一个导航记录
+     *
+     * @param $name
+     * @param $position
+     * @param $sort
+     * @param $link
+     * @param $parentId
+     * @param $id
+     * @param $logo
+     * @return mixed
+     */
     public function editNav($name, $position, $sort, $link, $parentId, $id, $logo) {
         $data = array(
             'name' => $name,
@@ -127,10 +139,28 @@ class Nav_model extends CI_Model {
             'sort' => $sort,
             'link' => $link,
             'parent_id' => $parentId,
-            'logo' => $logo
         );
+        if($logo) {
+            $data['logo'] = $logo;
+        }
 
         $this->db->where('id', $id);
         return $this->db->update($this->table, $data);
+    }
+
+    /**
+     * 根据导航链接的页面id获取一个导航记录
+     *
+     * @param $pageId
+     * @return int
+     */
+    public function getNavByPageId($pageId) {
+        $query = $this->db->where('link', $pageId)->order_by('sort', 'asc')->get($this->table, 1, 0);
+        if($query->num_rows() > 0) {
+            $result = $query->result();
+            return $result[0];
+        }else{
+            return 0;
+        }
     }
 }
