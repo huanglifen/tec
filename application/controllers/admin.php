@@ -82,7 +82,7 @@ class Admin extends Controller {
      */
     public function addNav() {
         $this->checkLogin();
-        $pages = $this->adminlib->getParentPage();
+        $pages = $this->adminlib->getPages(1, 100);
         $this->data['pages'] = $pages;
 
         $this->data['type'] = 1;

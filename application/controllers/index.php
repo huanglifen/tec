@@ -35,9 +35,12 @@ class Index extends Controller {
 
         $logo = $this->weblib->getLogo();
         $navs = $this->weblib->getNavs();
+        $path = $this->path;
+        $siteTitle = $this->weblib->getSiteTitle();
+        $this->title = $siteTitle ? $siteTitle : $this->title;
+
         $pictures = $this->weblib->getPictures();
         $rows = $this->weblib->getRowsAndColumns();
-        $path = $this->path;
 
         $this->data = compact('navs', 'pictures', 'rows', 'logo', 'path', 'navId');
         $this->showView('index');
@@ -73,7 +76,10 @@ class Index extends Controller {
 
         $logo = $this->weblib->getLogo();
         $navs = $this->weblib->getNavs();
+
         $path = $this->path;
+        $siteTitle = $this->weblib->getSiteTitle();
+        $this->title = $siteTitle ? $siteTitle : $this->title;
 
         $this->data = compact('pageInfo', 'logo', 'navs', 'path', 'navId');
         $this->showView('page');
@@ -102,7 +108,10 @@ class Index extends Controller {
 
         $logo = $this->weblib->getLogo();
         $navs = $this->weblib->getNavs();
+
         $path = $this->path;
+        $siteTitle = $this->weblib->getSiteTitle();
+        $this->title = $siteTitle ? $siteTitle : $this->title;
 
         $this->data = compact('results', 'logo', 'navs', 'path', 'totalPage', 'keyword', 'page');
         $this->showView('search');

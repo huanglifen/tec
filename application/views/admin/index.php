@@ -10,7 +10,7 @@
         $siteName =  isset($config['siteName']) ? $config['siteName'] : '';
         $siteTitle = isset($config['siteTitle']) ? $config['siteTitle'] : '';
         $siteDesc =  isset($config['siteDesc']) ? $config['siteDesc'] : '';
-        $siteLogo =  isset($config['siteLogo']) ? json_decode($config['siteLogo'], true) : array();
+        $siteLogo =  isset($config['siteLogo']) ? json_decode($config['siteLogo'], true) : array('origName' => '');
         $address =  isset($config['address']) ? $config['address'] : '';
         $close =  isset($config['close']) ? $config['close'] : '';
         $icp = isset($config['icp']) ? $config['icp'] : '';

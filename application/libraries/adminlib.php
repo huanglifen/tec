@@ -49,6 +49,7 @@ class AdminLib extends BaseLib{
     public function getConfig() {
         $result = $this->ci->config_model->getConfig();
 
+        $return = array();
         if(count($result)) {
             $return = array();
             foreach($result as $key => $v) {

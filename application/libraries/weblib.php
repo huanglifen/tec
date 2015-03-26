@@ -40,6 +40,15 @@ class WebLib extends BaseLib{
         }
     }
 
+    public function getSiteTitle() {
+        $title = $this->ci->config_model->getConfigByName('siteTitle');
+        if($title) {
+            return $title->value;
+        }else{
+            return false;
+        }
+    }
+
     /**
      * 获取导航记录
      *
@@ -66,7 +75,9 @@ class WebLib extends BaseLib{
         foreach($rows as $row) {
             $rowIds[] = $row->id;
         }
-        $columns = $this->getColumns($rowIds);
+        if(count($rowIds)) {
+            $columns = $this->getColumns($rowIds);
+        }
 
         foreach($rows as $row) {
             $row->columns = array();
@@ -90,6 +101,11 @@ class WebLib extends BaseLib{
         return $this->ci->indexrow_model->getRowsOrderBySort(0, 10);
     }
 
+    /**
+     * 根据row_ids获取子区域
+     * @param $rowIds
+     * @return mixed
+     */
     public function getColumns($rowIds) {
         return $this->ci->indexcolumn_model->getColumnsOrderBySort($rowIds);
     }

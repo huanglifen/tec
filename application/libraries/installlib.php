@@ -54,8 +54,9 @@ class InstallLib extends BaseLib{
         $loadSql = $this->ci->config->item('sql');
         $sqls = file_get_contents($loadSql);
 
-        $sqls = preg_replace('/tableprefix_/Ums', "$tablePrefix", $sqls);
-        $sqls = explode(";", $sqls);
+        $sqls = preg_replace('/hx_/Ums', "$tablePrefix", $sqls);
+        $sqls = str_replace(array("\r\n", "\r", "\n"),"", $sqls);
+        $sqls = explode("{;}", $sqls);
 
         foreach($sqls as $sql){
             $sqlTrim = trim($sql);
@@ -66,13 +67,12 @@ class InstallLib extends BaseLib{
                 }
             }
         }
-
         return true;
     }
 
     protected function initAdmin($username, $password, $tablePrefix) {
         $time = date('Y-m-d H:i:s', time());
-        $sql = "insert into " .$tablePrefix ."admin (name, password, status, time, default) value('$username', '$password', 0, '$time', 1)";
+        $sql = "insert into " .$tablePrefix ."admin (`name`, `password`, `status`, `time`, `default`) value('$username', '$password', 0, '$time', 1)";
         $result = $this->ci->db->query($sql);
 
         return $result;
