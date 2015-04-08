@@ -4,16 +4,15 @@ class Controller extends  CI_Controller {
     protected $data = array();
     protected $errorInfo = array();
     protected $langFile = 'common';
-    const USER_NOT_LOGIIN = 1001;
+    const USER_NOT_LOGIN = 1001;
     const RESPONSE_FAILURE = 200;
     const RESPONSE_SUCCESS = 0;
 
     public function __construct() {
         parent::__construct();
-        $this->load->library('session');
         $this->load->helper('url');
         $this->title = '北京华信杰通';
-        $this->path = APPPATH . "../public/img/";
+        $this->path = "public/img/";
     }
 
     /**
@@ -31,7 +30,7 @@ class Controller extends  CI_Controller {
      */
     protected function checkLogin()
     {
-        $userId = $this->session->userdata('userId');
+        $userId = $_SESSION['userId'];
         if (! $userId) {
             redirect('adminlogin/index');
         }
@@ -41,7 +40,7 @@ class Controller extends  CI_Controller {
      * 判断用户是否已登录，未登录则输出响应
      */
     protected function isLogin() {
-        $userId = $this->session->userdata('userId');
+        $userId = $_SESSION['userId'];
         if (! $userId) {
             echo json_encode(array('status' => self::USER_NOT_LOGIIN));exit;
         }
@@ -55,7 +54,7 @@ class Controller extends  CI_Controller {
     protected function showView($view) {
         $this->data['baseUrl'] = $this->config->item('base_url');
         $this->data['title'] = $this->title;
-        $this->data['userName'] = $this->session->userdata('userName');
+        $this->data['userName'] = isset($_SESSION['userName']) ?  $_SESSION['userName'] : '';
         $this->load->view($view, $this->data);
     }
 
@@ -152,7 +151,7 @@ class Controller extends  CI_Controller {
      * @return int
      */
     protected function checkUrl($param) {
-        return preg_match('/^(https?:\/\/.+|www\..+|javascript:;$|#$)/', $param);
+        return preg_match('/^(https?:\/\/.+|javascript:;$|#$)/', $param);
     }
 
     /**

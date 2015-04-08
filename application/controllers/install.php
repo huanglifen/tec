@@ -12,7 +12,6 @@ class Install extends Controller
 
     public function __construct() {
         parent::__construct();
-
         $this->load->library('installlib');
         $this->lang->load($this->langFile);
         $this->load->helper('url');

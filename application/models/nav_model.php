@@ -155,7 +155,7 @@ class Nav_model extends CI_Model {
      * @return int
      */
     public function getNavByPageId($pageId) {
-        $query = $this->db->where('link', $pageId)->order_by('sort', 'asc')->get($this->table, 1, 0);
+        $query = $this->db->where('link', $pageId)->where('type', self::TYPE_MAIN)->order_by('sort', 'asc')->get($this->table, 1, 0);
         if($query->num_rows() > 0) {
             $result = $query->result();
             return $result[0];

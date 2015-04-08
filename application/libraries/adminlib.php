@@ -489,7 +489,6 @@ class AdminLib extends BaseLib{
      * @return mixed
      */
     public function addAdmin($name, $password) {
-        $password = md5($password);
         $data = array(
             'name' => $name,
             'password' => md5($password),
@@ -498,6 +497,11 @@ class AdminLib extends BaseLib{
             'default' => Admin_model::NOT_DEFAULT,
         );
         return $this->ci->admin_model->addAdmin($data);
+    }
+
+
+    public function getAdminByName($name) {
+        return $this->ci->admin_model->getAdminByName($name);
     }
 
     /**

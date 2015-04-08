@@ -18,9 +18,9 @@ $navId = isset($navId) ? $navId : 0;
     <div class="main_wrap">
         <div class="f_l">
             <?php
-            $siteLogo = $logo ? $path .$logo : "public/images/logo.gif"
+            $siteLogo = $logo ? $path .$logo : "public/images/logo.png"
             ?>
-            <img src="<?php echo $baseUrl. $siteLogo ?>" width="341" height="41" class="logo"/>
+            <img src="<?php echo $baseUrl. $siteLogo ?>" class="logo"/>
         </div>
         <div class="f_r right_top">
          <?php foreach($navs['head'] as $head) { ?>
@@ -38,6 +38,7 @@ $navId = isset($navId) ? $navId : 0;
         </div>
     </div>
 </div>
+<div class="clear_both"></div>
 <div class="nav">
     <div class="main_wrap">
         <ul class="nav_list" >
@@ -59,6 +60,7 @@ $navId = isset($navId) ? $navId : 0;
         </div>
     </div>
 </div>
+<div class="clear_both"></div>
 <script>
     $("#searchButton").on('click', function() {
         var keyword = $("#keyword").val();

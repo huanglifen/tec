@@ -199,6 +199,7 @@ if (defined('ENVIRONMENT'))
  * And away we go...
  *
  */
+session_start();
 require_once BASEPATH.'core/CodeIgniter.php';
 
 /* End of file indexbak.php */

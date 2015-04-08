@@ -14,7 +14,7 @@
 | path to your installation.
 |
 */
-$config['base_url']	= 'http://127.0.0.1:81/tec/';
+$config['base_url']	= 'http://127.0.0.1:82/tec/';
 
 /*
 |--------------------------------------------------------------------------
@@ -249,7 +249,7 @@ $config['sess_expiration']		= 7200;
 $config['sess_expire_on_close']	= FALSE;
 $config['sess_encrypt_cookie']	= FALSE;
 $config['sess_use_database']	= FALSE;
-$config['sess_table_name']		= 'ci_sessions';
+$config['sess_table_name']		= 'sessions';
 $config['sess_match_ip']		= FALSE;
 $config['sess_match_useragent']	= TRUE;
 $config['sess_time_to_update']	= 300;
@@ -360,6 +360,9 @@ $config['proxy_ips'] = '';
 $config['installed'] = APPPATH  . 'data/installed.lock';
 $config['database'] = APPPATH  . 'config/database.php';
 $config['sql'] = APPPATH . 'data/huaxin.sql';
+
+date_default_timezone_set('Asia/ShangHai');
+$config['time_zone'] = date_default_timezone_get();
 
 
 /* End of file config.php */

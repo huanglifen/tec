@@ -108,11 +108,17 @@ class Admin extends Controller {
         $name = $this->getParam('name', 'required{error_nav_name_required}');
         $position = $this->getParam('position', 'required{error_nav_position_required}');
         $sort = $this->getParam('sort', 'required{error_nav_sort_required}|number{error_number_required}');
-        $link = $this->getParam('link', 'required{error_nav_link_required}');
+        if($type == 1) {
+            $link = $this->getParam('link', 'required{error_nav_link_required}');
+        }else{
+            $link = $this->getParam('link', 'required{error_nav_link_required}|url{error_not_url}');
+        }
 
         if($this->errorInfo) {
             $this->data['error'] = $this->errorInfo;
             $this->data['type'] = $type;
+            $pages = $this->adminlib->getPages(1, 100);
+            $this->data['pages'] = $pages;
             return $this->showView('admin/addnav');
         }
 
@@ -147,7 +153,7 @@ class Admin extends Controller {
             redirect('admin/nav');
         }
 
-        $pages = $this->adminlib->getParentPage();
+        $pages =  $this->adminlib->getPages(1, 100);
         $this->data['pages'] = $pages;
         $this->data['nav'] = $nav;
         $this->data['id'] = $id;
@@ -168,7 +174,7 @@ class Admin extends Controller {
         if($category == 1) {
             $link = $this->getParam('linkS', 'required{error_nav_link_required}');
         }else{
-            $link = $this->getParam('linkC', 'required{error_nav_link_required}');
+            $link = $this->getParam('linkC', 'required{error_nav_link_required}|url{error_not_url}');
         }
 
         $id = $this->getParam('id', 'required');
@@ -516,7 +522,7 @@ class Admin extends Controller {
     public function administrator($page = 1) {
         $this->checkLogin();
 
-        $adminId = $this->session->userdata('userId');
+        $adminId = $_SESSION['userId'];
         $admin = $this->adminlib->getAdminById($adminId);
         $admin->hasRight = $admin->default;
 
@@ -550,6 +556,13 @@ class Admin extends Controller {
 
             if((! array_key_exists('password', $this->errorInfo)) && ($password != $confirm)) {
                 $this->errorInfo['password'] = '两次输入密码不一致！';
+            }
+
+            if(! $this->errorInfo) {
+                $isExist = $this->adminlib->getAdminByName($name);
+                if($isExist) {
+                    $this->errorInfo['name'] = '管理员名称不能重复！';
+                }
             }
 
             if(! $this->errorInfo) {
@@ -609,7 +622,7 @@ class Admin extends Controller {
             }
 
             if(! $this->errorInfo) {
-                $id = $this->session->userdata('userId');
+                $id = $_SESSION['userId'];
                 $admin = $this->adminlib->getAdminById($id);
 
                 if($admin->password != md5($oldPassword)) {

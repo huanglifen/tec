@@ -79,7 +79,7 @@
                         </form>
                     </div>
                     <div class="JsTabPage <?php if($type !=2 ){ ?>display_none<?php } ?>">
-                        <form action="<?php echo $baseUrl?>admin/addNavAction/2" method="post">
+                        <form action="<?php echo $baseUrl?>admin/addNavAction/2" method="post"  enctype="multipart/form-data">
                             <table class="wrap_table">
                                 <tr>
                                     <td width="150px">导航名称</td>

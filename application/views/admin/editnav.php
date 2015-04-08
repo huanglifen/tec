@@ -7,7 +7,7 @@
         <?php
         $nameError = isset($error['name']) ? $error['name'] : '';
         $sortError = isset($error['sort']) ? $error['sort'] : '';
-        $linkError = isset($error['link']) ? $error['link'] : '';
+        $linkError = isset($error['linkC']) ? $error['linkC'] : '';
         ?>
         <div id="right">
             <div class='bread_nav'> 自定义导航栏</div>
@@ -80,9 +80,13 @@
                             <tr>
                                 <td>链接地址</td>
                                 <td class="no_right_border">
-
+                                    <div style="float:left;margin-right:10px;">
                                     <input type="text" class="input_text long <?php if($category !=  3) { ?> display_none <?php } ?>" value="<?php echo $link;?>"
                                            name="linkC" />
+                                    </div>
+                                    <div class="error <?php if($category !=  3) { ?> display_none <?php } ?> " id="JslinkError"><?php
+                                        echo $linkError; ?>
+                                    </div>
                                         <select name="linkS" class="my_select <?php if($category ==  3) { ?> display_none <?php } ?>">
                                             <option value="<?php echo $baseUrl;?>">首页</option>
                                             <?php foreach($pages as $page) {?>
@@ -122,9 +126,11 @@ $("input[name=category]").on('click', function() {
     if(value == '1') {
         $("select[name=linkS]").removeClass('display_none');
         $("input[name=linkC]").addClass('display_none');
+        $("#JslinkError").addClass('display_none');
     }else{
         $("select[name=linkS]").addClass('display_none');
         $("input[name=linkC]").removeClass('display_none');
+        $("#JslinkError").removeClass('display_none');
     }
 })
 </script>

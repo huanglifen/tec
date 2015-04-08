@@ -10,7 +10,7 @@
             <?php include APPPATH .'views/admin/left.php'?>
         </div>
         <div id="right">
-            <div class = 'bread_nav'> 添加页面 </div>
+            <div class = 'bread_nav'> <?php if($id) {?>编辑页面<?php }else { ?>添加页面<?php } ?> </div>
             <?php
             $nameError = isset($error['name']) ? $error['name'] : '';
             $titleError = isset($error['title']) ? $error['title'] : '';

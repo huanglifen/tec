@@ -35,6 +35,8 @@ class Index extends Controller {
 
         $logo = $this->weblib->getLogo();
         $navs = $this->weblib->getNavs();
+        $siteName = $this->weblib->getConfigByName('siteName');
+        $siteName = $siteName ? $siteName : '';
         $path = $this->path;
         $siteTitle = $this->weblib->getSiteTitle();
         $this->title = $siteTitle ? $siteTitle : $this->title;
@@ -42,7 +44,7 @@ class Index extends Controller {
         $pictures = $this->weblib->getPictures();
         $rows = $this->weblib->getRowsAndColumns();
 
-        $this->data = compact('navs', 'pictures', 'rows', 'logo', 'path', 'navId');
+        $this->data = compact('navs', 'pictures', 'rows', 'logo', 'path', 'navId', 'siteName');
         $this->showView('index');
     }
 
@@ -81,7 +83,10 @@ class Index extends Controller {
         $siteTitle = $this->weblib->getSiteTitle();
         $this->title = $siteTitle ? $siteTitle : $this->title;
 
-        $this->data = compact('pageInfo', 'logo', 'navs', 'path', 'navId');
+        $siteName = $this->weblib->getConfigByName('siteName');
+        $siteName = $siteName ? $siteName : '';
+
+        $this->data = compact('pageInfo', 'logo', 'navs', 'path', 'navId', 'siteName');
         $this->showView('page');
     }
 
@@ -113,7 +118,10 @@ class Index extends Controller {
         $siteTitle = $this->weblib->getSiteTitle();
         $this->title = $siteTitle ? $siteTitle : $this->title;
 
-        $this->data = compact('results', 'logo', 'navs', 'path', 'totalPage', 'keyword', 'page');
+        $siteName = $this->weblib->getConfigByName('siteName');
+        $siteName = $siteName ? $siteName : '';
+
+        $this->data = compact('results', 'logo', 'navs', 'path', 'totalPage', 'keyword', 'page', 'siteName');
         $this->showView('search');
     }
 }

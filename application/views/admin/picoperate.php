@@ -50,7 +50,7 @@
                                 <td>链接地址</td>
                                 <td class="no_right_border">
                                     <div style="float:left;margin-right:10px;">
-                                        <input type="text" class="input_text long" name="link" value="<?php echo $picture->link; ?>"/>
+                                        <input type="text" class="input_text long" name="link" value="<?php echo $picture->link ? $picture->link : '#'; ?>"/>
                                     </div>
                                     <div class="error"><?php  echo $error['link']; ?></div>
                                 </td>

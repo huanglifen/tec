@@ -12,7 +12,6 @@
             $length = mb_strlen($content);
             $total = 200;
             $start = $pos < 30 || $length <= $total  ? 0 : $pos - 10;
-
             $content = mb_substr($content, $start, $total);
             $content = str_replace($keyword, $replace, $content);
             if ($start != 0) {

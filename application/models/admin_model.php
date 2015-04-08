@@ -34,6 +34,21 @@ class Admin_model extends CI_Model {
     }
 
     /**
+     * 按用户名获取管理员信息
+     *
+     * @param $name
+     * @return bool
+     */
+    public function getAdminByName($name) {
+        $query = $this->db->where('name', $name)->get($this->table);
+        if($query->num_rows() > 0) {
+            $result = $query->result();
+            return $result[0];
+        }
+        return false;
+    }
+
+    /**
      * 按主键获取管理员信息
      *
      * @param $id

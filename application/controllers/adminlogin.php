@@ -29,8 +29,9 @@ class AdminLogin extends Controller {
             }
             $result = $this->adminlib->getAdminByNameAndPwd($name, $password);
             if($result) {
-                $user = array('userId' => $result->id, 'userName' => $result->name, 'userDefault' => $result->default);
-                $this->session->set_userdata($user);
+                $_SESSION['userId'] = $result->id;
+                $_SESSION['userName'] = $result->name;
+                $_SESSION['userDefault'] = $result->default;
                 return redirect('admin/index');
             }else{
                 $this->errorInfo['error'] = $this->lang->line('name_or_password_error');
@@ -43,8 +44,8 @@ class AdminLogin extends Controller {
     }
 
     public function logout() {
-        $user = array('userId' => 0, 'userName' => '');
-        $this->session->unset_userdata($user);
+        $_SESSION['userId'] = 0;
+        $_SESSION['userName'] = '';
 
         return redirect('adminlogin/index');
     }

@@ -49,6 +49,15 @@ class WebLib extends BaseLib{
         }
     }
 
+    public function getConfigByName($name) {
+        $result = $this->ci->config_model->getConfigByName($name);
+        if($result) {
+            return $result->value;
+        }else{
+            return false;
+        }
+    }
+
     /**
      * 获取导航记录
      *
@@ -153,6 +162,14 @@ class WebLib extends BaseLib{
 
         if($result) {
              $result = $result->id;
+        } else {
+            $pageInfo = $this->ci->page_model->getPageById($pageId);
+
+            $parentId = $pageInfo->parent_id;
+            $result =  $this->ci->nav_model->getNavByPageId($parentId);
+            if($result) {
+                $result = $result->id;
+            }
         }
         return $result;
     }
